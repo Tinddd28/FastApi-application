@@ -19,9 +19,9 @@ class google_sheets:
 
             # Call the Sheets API
             sheets = service.spreadsheets()
-            range="Sheet1!A:F"
+            range_="Sheet1!A:F"
 
-            result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=range).execute()
+            result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=range_).execute()
 
             values = result.get("values", [])
             count = 0
@@ -30,14 +30,14 @@ class google_sheets:
             else:
                 last = values[len(values) - 1][0]
                 count = int(last) + 1
-            range = "Sheet1"
+            range_ = "Sheet1"
             list = [[count], [user_dict["fio"]], [user_dict["topic"]], [user_dict["num"]], [user_dict["director"]], [user_dict["user_id"]]]
             resource = {
                 "majorDimension": "COLUMNS",
                 "values": list
             }
 
-            sheets.values().append(spreadsheetId=SPREADSHEET_ID, range=range, body=resource, valueInputOption="USER_ENTERED").execute()
+            sheets.values().append(spreadsheetId=SPREADSHEET_ID, range=range_, body=resource, valueInputOption="USER_ENTERED").execute()
 
 
             return user_dict["user_id"]
@@ -51,8 +51,8 @@ class google_sheets:
         try:
             #service = get_sheet()
             sheets = get_sheet().spreadsheets()
-            range="Sheet1!A:F"
-            result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=range).execute()
+            range_="Sheet1!A:F"
+            result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=range_).execute()
 
             values = result.get("values", [])
             a = []
@@ -79,3 +79,34 @@ class google_sheets:
         except HttpError as error:
             print(error)
 
+    @classmethod
+    async def check_id_and_link(cls, id: int):
+        try:
+            sheets = get_sheet().spreadsheets()
+            range_ = "Sheet1!A:G"
+            result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=range_).execute()
+
+            values = result.get("values", [])
+
+            if len(values) - 1 < id: 
+                return {"state": -1}
+            
+            flag = 0                                          # Блок проверки для пустого поля, чтобы не добавлялась ссылкка для несуществующего id
+
+            for row in values:
+                if row:
+                    print(row[0])
+                    if row[0] == str(id):
+                        flag = 1
+                        break
+
+            if flag:
+                for row in values:
+                    if len(row) == 6:
+                        return {"state": 0}
+                    return {"state": 1}
+            else: 
+                return {"state": -1}
+                    
+        except HttpError as error:
+            print(error)
