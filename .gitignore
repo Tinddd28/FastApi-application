@@ -1,2 +1,3 @@
 *.json
 spreadsheetId.py
+__pycache__

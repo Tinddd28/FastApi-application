@@ -1,12 +1,10 @@
 import os
 
-from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from config.spreadsheetId import st
-from table_conf import get_sheet
-
-from models import user
+from src.table_conf import get_sheet
+from src.models import user
 
 SPREADSHEET_ID = st
 
@@ -15,7 +13,7 @@ class User:
     @classmethod
     async def add_user(cls, data: user.UserAdd) -> int:
         try:
-            service = build("sheets", "v4", credentials=get_sheet())
+            service = get_sheet()
             
             user_dict = data.model_dump()
 
@@ -51,7 +49,7 @@ class User:
 
     async def get_requests(id: str) -> list:
         try:
-            service = build("sheets", "v4", credentials=get_sheet())
+            service = get_sheet()
             sheets = service.spreadsheets()
             range="Sheet1!A:F"
             result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=range).execute()

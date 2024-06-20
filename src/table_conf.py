@@ -24,4 +24,4 @@ def get_sheet():
         with open("./config/token.json", "w") as token:
             token.write(credentials.to_json())
 
-    return credentials
+    return build("sheets", "v4", credentials=credentials)
