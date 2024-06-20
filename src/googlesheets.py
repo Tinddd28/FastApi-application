@@ -4,14 +4,14 @@ from googleapiclient.errors import HttpError
 
 from config.spreadsheetId import st
 from src.table_conf import get_sheet
-from src.models import user
+from src.models import request
 
 SPREADSHEET_ID = st
 
 
-class User:
+class google_sheets:
     @classmethod
-    async def add_user(cls, data: user.UserAdd) -> int:
+    async def add_request(cls, data: request.RequestAdd) -> int:
         try:
             service = get_sheet()
             
@@ -46,11 +46,11 @@ class User:
             print(error)
 
 
-
-    async def get_requests(id: str) -> list:
+    @classmethod
+    async def get_requests(cls, id: int) -> list:
         try:
-            service = get_sheet()
-            sheets = service.spreadsheets()
+            #service = get_sheet()
+            sheets = get_sheet().spreadsheets()
             range="Sheet1!A:F"
             result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=range).execute()
 
@@ -63,6 +63,19 @@ class User:
                         a.append(x)
 
             return a
+        except HttpError as error:
+            print(error)
+    @classmethod
+    async def add_link(cls, id: int, url:str):
+        try:
+            sheets = get_sheet().spreadsheets()
+            range_ = f"Sheet1!G{id + 1}"
+            value_input_option = "RAW"
+            values = [[url]]
+            body = {"values": values}
+            sheets.values().update(spreadsheetId=SPREADSHEET_ID, range=range_,valueInputOption=value_input_option, body=body).execute()
+
+            return {"id": id, "url": url}
         except HttpError as error:
             print(error)
 
