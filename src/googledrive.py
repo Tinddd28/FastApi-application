@@ -3,7 +3,7 @@ import os.path
 from googleapiclient.http import MediaFileUpload
 from googleapiclient.errors import HttpError
 from src.googleDrive_conf import get_cred
-from config.id_folder import folder_id
+from config.idFolder import folder_id
 
 
 
