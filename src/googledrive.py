@@ -3,6 +3,7 @@ import os.path
 from googleapiclient.http import MediaFileUpload
 from googleapiclient.errors import HttpError
 from src.googleDrive_conf import get_cred
+from config.id_folder import folder_id
 
 
 
@@ -15,7 +16,7 @@ class File_cl:
         try:
             service = get_cred()
             # Call the Drive v3 API
-            id_folder = "1iNrAuUoXkAHPYN_ZbWqojC-4tHDuBSKT"
+            id_folder = folder_id
             file_metadata = {"name": os.path.basename(file_path), "parents": [id_folder]}
             media = MediaFileUpload(file_path, resumable=True)
             file_l = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
