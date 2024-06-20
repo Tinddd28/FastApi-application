@@ -95,7 +95,6 @@ class google_sheets:
 
             for row in values:
                 if row:
-                    print(row[0])
                     if row[0] == str(id):
                         flag = 1
                         break
