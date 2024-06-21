@@ -2,11 +2,11 @@ import os
 
 from googleapiclient.errors import HttpError
 
-from config.spreadsheetId import st
+from config.config import sheet_id
 from src.table_conf import get_sheet
 from src.models import request
 
-SPREADSHEET_ID = st
+SPREADSHEET_ID = sheet_id
 
 
 class google_sheets:

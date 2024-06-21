@@ -3,12 +3,8 @@ import os.path
 from googleapiclient.http import MediaFileUpload
 from googleapiclient.errors import HttpError
 from src.googleDrive_conf import get_cred
-from config.idFolder import folder_id
+from config.config import folder_id
 
-
-
-# If modifying these scopes, delete the file token.json.
-SCOPES = ["https://www.googleapis.com/auth/drive"]
 
 class File_cl:
     @classmethod
@@ -22,6 +18,7 @@ class File_cl:
             file_l = service.files().create(body=file_metadata, media_body=media, fields="id").execute()
             file_id = file_l.get("id")
             file_url = f"https://drive.google.com/file/d/{file_id}/view"
+            print(file_url)
 
             return {"file_id": file_id, "file_url": file_url}
 

@@ -1,4 +1,2 @@
 *.json
-spreadsheetId.py
-idFolder.py
 __pycache__

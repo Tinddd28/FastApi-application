@@ -12,19 +12,19 @@ def get_cred():
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists("./config/tokenGD.json"):
-        creds = Credentials.from_authorized_user_file("./config/tokenGD.json", SCOPES)
+    if os.path.exists("./config/gdtoken.json"):
+        creds = Credentials.from_authorized_user_file("./config/gdtoken.json", SCOPES)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "./config/credGD.json", SCOPES
+                "./config/gdcr.json", SCOPES
             )
             creds = flow.run_local_server(port=9000)
         # Save the credentials for the next run
-        with open("./config/tokenGD.json", "w") as token:
+        with open("./config/gdtoken.json", "w") as token:
             token.write(creds.to_json())
 
     return build("drive", "v3", credentials=creds)
